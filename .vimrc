@@ -390,6 +390,17 @@ set ai "Auto indent
 set si "Smart indet
 set wrap "Wrap lines
 
+" Use the arrows to something usefull
+map <right> :bn<cr>
+map <left> :bp<cr>
+
+"Move a line of text using ALT+[jk] or Comamnd+[jk] on mac
+nmap <M-j> mz:m+<cr>`z
+nmap <M-k> mz:m-2<cr>`z
+vmap <M-j> :m'>+<cr>`<my`>mzgv`yo`z
+vmap <M-k> :m'<-2<cr>`>my`<mzgv`yo`z
+
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "
 " advance配置
@@ -428,6 +439,90 @@ set autochdir
 set tags=tags;
 
 
+" " " " " " " " " " " " " " " " " " " " " "
+"
 "php手册 打开PHP文件后，把光标移动到某个函数下，按大写的K键即可查看函数的文档内容
+"利用composer 安装pman,命令
+" composer global require gonzaloserrano/pman-php-manual:dev-master
+"
+" " " " " " " " " " " " " " " " " " " " " "
 autocmd FileType php setlocal keywordprg=pman
+
+
+
+" " " " " " " " " " " " " " " " " " " " " "
+"
+" Delete trailing white space, useful for Python ;)
+"
+" " " " " " " " " " " " " " " " " " " " " "
+func! DeleteTrailingWS()
+    exe "normal mz"
+    %s/\s\+$//ge
+    exe "normal `z"
+endfunc
+autocmd BufWrite *.py :call DeleteTrailingWS()
+autocmd BufWrite *.php :call DeleteTrailingWS()
+autocmd BufWrite *.js :call DeleteTrailingWS()
+
+
+
+" " " " " " " " " " " " " " " "
+"
+" language section
+"
+" " " " " " " " " " " " " " " "
+
+""""""""""""""""""""""""""""""
+" => JavaScript section
+"""""""""""""""""""""""""""""""
+au FileType javascript call JavaScriptFold()
+au FileType javascript setl fen
+au FileType javascript setl nocindent
+
+au FileType javascript imap <c-t> AJS.log();<esc>hi
+au FileType javascript imap <c-a> alert();<esc>hi
+
+au FileType javascript inoremap <buffer> $r return
+au FileType javascript inoremap <buffer> $f //--- PH ----------------------------------------------<esc>FP2xi
+
+function! JavaScriptFold()
+    setl foldmethod=syntax
+    setl foldlevelstart=1
+    syn region foldBraces start=/{/ end=/}/ transparent fold keepend extend
+
+    function! FoldText()
+        return substitute(getline(v:foldstart), '{.*', '{...}', '')
+    endfunction
+    setl foldtext=FoldText()
+endfunction
+
+""""""""""""""""""""""""""""""
+" => Python section
+""""""""""""""""""""""""""""""
+let python_highlight_all = 1
+au FileType python syn keyword pythonDecorator True None False self
+
+au BufNewFile,BufRead *.jinja set syntax=htmljinja
+au BufNewFile,BufRead *.mako set ft=mako
+
+au FileType python inoremap <buffer> $r return
+au FileType python inoremap <buffer> $i import
+au FileType python inoremap <buffer> $p print
+au FileType python inoremap <buffer> $f #--- PH ----------------------------------------------<esc>FP2xi
+au FileType python map <buffer> <leader>1 /class
+au FileType python map <buffer> <leader>2 /def
+au FileType python map <buffer> <leader>C ?class
+au FileType python map <buffer> <leader>D ?def
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Spell checking
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"Pressing ,ss will toggle and untoggle spell checking
+map <leader>ss :setlocal spell!<cr>
+"Shortcuts using <leader>
+map <leader>sn ]s
+map <leader>sp [s
+map <leader>sa zg
+map <leader>s? z=
 
