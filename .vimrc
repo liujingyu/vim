@@ -1,5 +1,252 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "
+" 基本配置
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"line no
+set nu
+"光标
+set mouse=a
+" 启动的时候不显示那个援助索马里儿童的提示
+set shortmess=atl
+" 帮助文件使用中文
+set helplang=cn
+" 设置折叠模式
+set foldcolumn=4
+" 光标遇到折叠就打开
+set foldopen=all
+"突出显示当前行
+set cursorline
+"no bomb
+set nobomb
+"line number
+set nu
+" Sets how many lines of history VIM has to remember
+set history=10000
+
+" Set to auto read when a file is changed from the outside
+set autoread
+
+" With a map leader it's possible to do extra key combinations
+" like <leader>w saves the current file
+let mapleader = ","
+let g:mapleader = ","
+
+" Fast saving or quit
+nmap <leader>w :w<cr>
+nmap <leader>q :q!<cr>
+nmap <leader>Q :qa!<cr>
+nmap <Leader>WQ :wa<cr>:q<cr>
+" 定义快捷键到行首和行尾
+nmap <Leader>lb 0
+nmap <Leader>le $
+
+" Fast editing of the .vimrc
+map <leader>e :e! ~/.vimrc<cr>
+
+" When vimrc is edited, reload it
+au! bufwritepost vimrc source ~/.vimrc
+
+" Set 7 lines to the curors - when moving vertical..
+set so=7
+
+set wildmenu "Turn on WiLd menu
+
+set ruler "Always show current position
+
+set cmdheight=2 "The commandbar height
+
+set hid "Change buffer - without saving
+
+" Set backspace config
+set backspace=eol,start,indent
+set whichwrap+=<,>,h,l
+
+set ignorecase "Ignore case when searching
+set smartcase
+
+set hlsearch "Highlight search things
+
+set incsearch "Make search act like search in modern browsers
+set nolazyredraw "Don't redraw while executing macros
+
+set magic "Set magic on, for regular expressions
+
+set showmatch "Show matching bracets when text indicator is over them
+set mat=2 "How many tenths of a second to blink
+
+" No sound on errors
+set noerrorbells
+set novisualbell
+set t_vb=
+set tm=500
+
+" Turn backup off, since most stuff is in SVN, git anyway...
+set nobackup
+set nowb
+set noswapfile
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Text, tab and indent related
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 将制表符扩展为空格
+set expandtab
+" 设置格式化时制表符占用空格数
+set shiftwidth=4
+" 设置编辑时制表符占用空格数
+set tabstop=4
+" 让 vim 把连续数量的空格视为一个制表符
+set softtabstop=4
+
+set lbr
+set tw=500
+
+set ai "Auto indent
+set si "Smart indet
+set wrap "Wrap lines
+
+" Use the arrows to something usefull
+map <right> :bn<cr>
+map <left> :bp<cr>
+
+"Move a line of text using ALT+[jk] or Comamnd+[jk] on mac
+nmap <M-j> mz:m+<cr>`z
+nmap <M-k> mz:m-2<cr>`z
+vmap <M-j> :m'>+<cr>`<my`>mzgv`yo`z
+vmap <M-k> :m'<-2<cr>`>my`<mzgv`yo`z
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" advance配置
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" " " " " " " " " " "
+"
+"光标处理
+"
+" " " " " " " " " " "
+if exists('$TMUX')
+    let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+    let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+else
+    let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+    let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+endif
+
+
+" " " " " " " " " " "
+"
+"代码背景色
+"
+" " " " " " " " " " "
+if exists('$TMUX')
+    set term=screen-256color
+endif
+
+" " " " " " " " " " "
+"
+"tags 配置
+"
+" " " " " " " " " " "
+set tags+=/Users/MLS/work/mall
+set autochdir
+set tags=tags;
+
+
+" " " " " " " " " " " " " " " " " " " " " "
+"
+"php手册 打开PHP文件后，把光标移动到某个函数下，按大写的K键即可查看函数的文档内容
+"利用composer 安装pman,命令
+" composer global require gonzaloserrano/pman-php-manual:dev-master
+"
+" " " " " " " " " " " " " " " " " " " " " "
+au FileType php setlocal keywordprg=pman
+
+
+
+" " " " " " " " " " " " " " " " " " " " " "
+"
+" Delete trailing white space, useful for Python ;)
+"
+" " " " " " " " " " " " " " " " " " " " " "
+func! DeleteTrailingWS()
+    exe "normal mz"
+    %s/\s\+$//ge
+    exe "normal `z"
+endfunc
+au BufWrite *.py :call DeleteTrailingWS()
+au BufWrite *.php :call DeleteTrailingWS()
+au BufWrite *.js :call DeleteTrailingWS()
+
+"au InsertEnter * hi Normal ctermbg=234 guibg=#000000
+"au InsertLeave * hi Normal ctermbg=232 guibg=#1b1d1e
+
+
+
+" " " " " " " " " " " " " " " "
+"
+" language section
+"
+" " " " " " " " " " " " " " " "
+
+""""""""""""""""""""""""""""""
+" => JavaScript section
+"""""""""""""""""""""""""""""""
+au FileType javascript call JavaScriptFold()
+au FileType javascript setl fen
+au FileType javascript setl nocindent
+
+au FileType javascript imap <c-t> AJS.log();<esc>hi
+au FileType javascript imap <c-a> alert();<esc>hi
+
+au FileType javascript inoremap <buffer> $r return
+au FileType javascript inoremap <buffer> $f //--- PH ----------------------------------------------<esc>FP2xi
+
+function! JavaScriptFold()
+    setl foldmethod=syntax
+    setl foldlevelstart=1
+    syn region foldBraces start=/{/ end=/}/ transparent fold keepend extend
+
+    function! FoldText()
+        return substitute(getline(v:foldstart), '{.*', '{...}', '')
+    endfunction
+    setl foldtext=FoldText()
+endfunction
+
+""""""""""""""""""""""""""""""
+" => Python section
+""""""""""""""""""""""""""""""
+let python_highlight_all = 1
+au FileType python syn keyword pythonDecorator True None False self
+
+au BufNewFile,BufRead *.jinja set syntax=htmljinja
+au BufNewFile,BufRead *.mako set ft=mako
+
+au FileType python inoremap <buffer> $r return
+au FileType python inoremap <buffer> $i import
+au FileType python inoremap <buffer> $p print
+au FileType python inoremap <buffer> $f #--- PH ----------------------------------------------<esc>FP2xi
+au FileType python map <buffer> <leader>1 /class
+au FileType python map <buffer> <leader>2 /def
+au FileType python map <buffer> <leader>C ?class
+au FileType python map <buffer> <leader>D ?def
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Spell checking
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"Pressing ,ss will toggle and untoggle spell checking
+map <leader>ss :setlocal spell!<cr>
+"Shortcuts using <leader>
+map <leader>sn ]s
+map <leader>sp [s
+map <leader>sa zg
+map <leader>s? z=
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
 " => Vundle插件管理
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -7,9 +254,9 @@
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 " All of your Plugins must be added before the following line
-call vundle#end()           
+call vundle#end()
 
-filetype plugin indent on    
+filetype plugin indent on
 filetype plugin on
 
 """"""""""""""""""""""""
@@ -22,7 +269,6 @@ Plugin 'gmarik/Vundle.vim'
 " Fugitive: Git 集成，强烈推荐！
 """"""""""""""""""""""""
 Plugin 'tpope/vim-fugitive'
-
 
 
 """"""""""""""""""""""""
@@ -44,7 +290,7 @@ let g:NERDTreeDirArrowCollapsible = '-'
 Plugin 'terryma/vim-multiple-cursors'
 
 " 开启多光标
-let g:multi_cursor_start_key='<F6>'
+let g:multi_cursor_start_key='<C-n>'
 " Default mapping
 let g:multi_cursor_next_key='<C-n>'
 let g:multi_cursor_prev_key='<C-p>'
@@ -119,10 +365,14 @@ else
 endif
 colorscheme solarized
 let g:solarized_termcolors=256
-call togglebg#map("<F5>")
+"call togglebg#map("<F5>")
+
+"when difference mode, colors becomes!
+"au InsertEnter * hi Normal term=reverse ctermbg=darkgrey guibg=yellow
+"au InsertLeave * hi Normal term=None ctermbg=black guibg=white
+
 
 Plugin 'edsono/vim-matchit'
-
 
 """"""""""""""""""""""""
 " tagbar
@@ -132,8 +382,9 @@ nmap <F4> :TagbarToggle<CR>
 let g:Tb_MaxSize = 2
 
 
-Plugin 'jiazhoulvke/MarkdownView'
+"provides insert mode auto-completion for quotes, parens, brackets, etc
 Plugin 'Raimondi/delimitMate'
+
 Plugin 'scrooloose/syntastic'
 
 """"""""""""""""""""""""
@@ -148,16 +399,22 @@ omap / <Plug>(easymotion-tn)
 map  n <Plug>(easymotion-next)
 map  N <Plug>(easymotion-prev)
 let g:EasyMotion_smartcase = 1
-" JK motions: Line motions
+map <Leader>l <Plug>(easymotion-lineforward)
 map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
+map <Leader>h <Plug>(easymotion-linebackward)
 
 Plugin 'ldx/vim-manage-classpath'
 Plugin 'tomasr/molokai'
+
 Plugin 'leshill/vim-json'
+let g:vim_json_syntax_conceal = 1
+
 Plugin 'sjl/gundo.vim'
 Plugin 'tyru/open-browser.vim'
+
 Plugin 'anyakichi/vim-surround'
+
 Plugin 'MarcWeber/vim-addon-mw-utils'
 Plugin 'ShowTrailingWhitespace'
 Plugin 'terryma/vim-expand-region'
@@ -247,6 +504,7 @@ let g:ycm_semantic_triggers =  {
   \ }
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
 let g:ycm_min_num_of_chars_for_completion = 1
+let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 
 
 
@@ -260,7 +518,7 @@ let g:user_emmet_mode='n'    "only enable normal mode functions.
 let g:user_emmet_mode='inv'  "enable all functions, which is equal to
 let g:user_emmet_mode='a'    "enable all function in all mode.
 let g:user_emmet_install_global = 0
-autocmd FileType html,css,php,xml EmmetInstall
+au FileType html,css,php,xml EmmetInstall
 let g:user_emmet_leader_key='<C-Z>'
 let g:user_emmet_settings = {
   \  'php' : {
@@ -282,247 +540,37 @@ Plugin 'dyng/ctrlsf.vim'
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " snipmate 配置
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-Plugin 'msanders/snipmate.vim'
+"Plugin 'msanders/snipmate.vim'
 
 " snipmate插件add author name in snips_author
-let g:snips_author = "liujingyu"
+"let g:snips_author = "liujingyu"
 
 " 折行
 Plugin 'djoshea/vim-matlab'
 Plugin 'djoshea/vim-matlab-fold'
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-" 基本配置
-"
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-"line no
-set nu
-"光标
-set mouse=a
-" 启动的时候不显示那个援助索马里儿童的提示
-set shortmess=atl
-" 帮助文件使用中文
-set helplang=cn
-" 设置折叠模式
-set foldcolumn=4
-" 光标遇到折叠就打开
-set foldopen=all
-"突出显示当前行
-set cursorline
-"no bomb
-set nobomb
-"line number
-set nu
-" Sets how many lines of history VIM has to remember
-set history=10000
-
-" Set to auto read when a file is changed from the outside
-set autoread
-
-" With a map leader it's possible to do extra key combinations
-" like <leader>w saves the current file
-let mapleader = ","
-let g:mapleader = ","
-
-" Fast saving
-nmap <leader>w :w!<cr>
-nmap <leader>qa :qa!<cr>
-
-" Fast editing of the .vimrc
-map <leader>e :e! ~/.vimrc<cr>
-
-" When vimrc is edited, reload it
-autocmd! bufwritepost vimrc source ~/.vimrc
-
-" Set 7 lines to the curors - when moving vertical..
-set so=7
-
-set wildmenu "Turn on WiLd menu
-
-set ruler "Always show current position
-
-set cmdheight=2 "The commandbar height
-
-set hid "Change buffer - without saving
-
-" Set backspace config
-set backspace=eol,start,indent
-set whichwrap+=<,>,h,l
-
-set ignorecase "Ignore case when searching
-set smartcase
-
-set hlsearch "Highlight search things
-
-set incsearch "Make search act like search in modern browsers
-set nolazyredraw "Don't redraw while executing macros
-
-set magic "Set magic on, for regular expressions
-
-set showmatch "Show matching bracets when text indicator is over them
-set mat=2 "How many tenths of a second to blink
-
-" No sound on errors
-set noerrorbells
-set novisualbell
-set t_vb=
-set tm=500
-
-" Turn backup off, since most stuff is in SVN, git anyway...
-set nobackup
-set nowb
-set noswapfile
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Text, tab and indent related
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set expandtab
-set shiftwidth=4
-set tabstop=4
-set smarttab
 
-set lbr
-set tw=500
-
-set ai "Auto indent
-set si "Smart indet
-set wrap "Wrap lines
-
-" Use the arrows to something usefull
-map <right> :bn<cr>
-map <left> :bp<cr>
-
-"Move a line of text using ALT+[jk] or Comamnd+[jk] on mac
-nmap <M-j> mz:m+<cr>`z
-nmap <M-k> mz:m-2<cr>`z
-vmap <M-j> :m'>+<cr>`<my`>mzgv`yo`z
-vmap <M-k> :m'<-2<cr>`>my`<mzgv`yo`z
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-" advance配置
+" UltiSnips
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" " " " " " " " " " "
-"
-"光标处理
-"
-" " " " " " " " " " "
-if exists('$TMUX')
-    let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
-    let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
-else
-    let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-    let &t_EI = "\<Esc>]50;CursorShape=0\x7"
-endif
+" Track the engine.
+Plugin 'SirVer/ultisnips'
 
+" Snippets are separated from the engine. Add this if you want them:
+Plugin 'honza/vim-snippets'
 
-" " " " " " " " " " "
-"
-"代码背景色
-"
-" " " " " " " " " " "
-if exists('$TMUX')
-    set term=screen-256color
-endif
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
-" " " " " " " " " " "
-"
-"tags 配置
-"
-" " " " " " " " " " "
-set tags+=/Users/MLS/work/mall
-set autochdir
-set tags=tags;
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
 
+" assuming you want to use snipmate snippet engine
+"ActivateAddons vim-snippets snipmate
+let g:UltiSnipsUsePythonVersion = 2
 
-" " " " " " " " " " " " " " " " " " " " " "
-"
-"php手册 打开PHP文件后，把光标移动到某个函数下，按大写的K键即可查看函数的文档内容
-"利用composer 安装pman,命令
-" composer global require gonzaloserrano/pman-php-manual:dev-master
-"
-" " " " " " " " " " " " " " " " " " " " " "
-autocmd FileType php setlocal keywordprg=pman
-
-
-
-" " " " " " " " " " " " " " " " " " " " " "
-"
-" Delete trailing white space, useful for Python ;)
-"
-" " " " " " " " " " " " " " " " " " " " " "
-func! DeleteTrailingWS()
-    exe "normal mz"
-    %s/\s\+$//ge
-    exe "normal `z"
-endfunc
-autocmd BufWrite *.py :call DeleteTrailingWS()
-autocmd BufWrite *.php :call DeleteTrailingWS()
-autocmd BufWrite *.js :call DeleteTrailingWS()
-
-
-
-" " " " " " " " " " " " " " " "
-"
-" language section
-"
-" " " " " " " " " " " " " " " "
-
-""""""""""""""""""""""""""""""
-" => JavaScript section
-"""""""""""""""""""""""""""""""
-au FileType javascript call JavaScriptFold()
-au FileType javascript setl fen
-au FileType javascript setl nocindent
-
-au FileType javascript imap <c-t> AJS.log();<esc>hi
-au FileType javascript imap <c-a> alert();<esc>hi
-
-au FileType javascript inoremap <buffer> $r return
-au FileType javascript inoremap <buffer> $f //--- PH ----------------------------------------------<esc>FP2xi
-
-function! JavaScriptFold()
-    setl foldmethod=syntax
-    setl foldlevelstart=1
-    syn region foldBraces start=/{/ end=/}/ transparent fold keepend extend
-
-    function! FoldText()
-        return substitute(getline(v:foldstart), '{.*', '{...}', '')
-    endfunction
-    setl foldtext=FoldText()
-endfunction
-
-""""""""""""""""""""""""""""""
-" => Python section
-""""""""""""""""""""""""""""""
-let python_highlight_all = 1
-au FileType python syn keyword pythonDecorator True None False self
-
-au BufNewFile,BufRead *.jinja set syntax=htmljinja
-au BufNewFile,BufRead *.mako set ft=mako
-
-au FileType python inoremap <buffer> $r return
-au FileType python inoremap <buffer> $i import
-au FileType python inoremap <buffer> $p print
-au FileType python inoremap <buffer> $f #--- PH ----------------------------------------------<esc>FP2xi
-au FileType python map <buffer> <leader>1 /class
-au FileType python map <buffer> <leader>2 /def
-au FileType python map <buffer> <leader>C ?class
-au FileType python map <buffer> <leader>D ?def
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Spell checking
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"Pressing ,ss will toggle and untoggle spell checking
-map <leader>ss :setlocal spell!<cr>
-"Shortcuts using <leader>
-map <leader>sn ]s
-map <leader>sp [s
-map <leader>sa zg
-map <leader>s? z=
-
+set runtimepath+=~/.vim/ultisnips_rep
