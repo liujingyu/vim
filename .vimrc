@@ -117,6 +117,30 @@ vmap <M-j> :m'>+<cr>`<my`>mzgv`yo`z
 vmap <M-k> :m'<-2<cr>`>my`<mzgv`yo`z
 
 
+""""""""""""""""""""""""""""""
+" => Statusline
+""""""""""""""""""""""""""""""
+" Always hide the statusline
+set laststatus=2
+
+function! CurDir()
+    let curdir = substitute(getcwd(), '/Users/apple/', "~/", "g")
+    return curdir
+endfunction
+
+function! HasPaste()
+    if &paste
+        return 'PASTE MODE  '
+    else
+        return ''
+    endif
+endfunction
+
+
+" Format the statusline
+set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{CurDir()}%h\ \ \ Line:\ %l/%L:%c
+
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "
 " advance配置
@@ -363,6 +387,7 @@ if has('gui_running')
 else
 	set background=dark
 endif
+
 colorscheme solarized
 let g:solarized_termcolors=256
 "call togglebg#map("<F5>")
@@ -540,10 +565,10 @@ Plugin 'dyng/ctrlsf.vim'
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " snipmate 配置
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"Plugin 'msanders/snipmate.vim'
+Plugin 'msanders/snipmate.vim'
 
 " snipmate插件add author name in snips_author
-"let g:snips_author = "liujingyu"
+let g:snips_author = "liujingyu"
 
 " 折行
 Plugin 'djoshea/vim-matlab'
@@ -555,16 +580,18 @@ Plugin 'djoshea/vim-matlab-fold'
 " UltiSnips
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Track the engine.
-Plugin 'SirVer/ultisnips'
-
-" Snippets are separated from the engine. Add this if you want them:
-Plugin 'honza/vim-snippets'
+"" Track the engine.
+"Plugin 'SirVer/ultisnips'
+"
+"" Snippets are separated from the engine. Add this if you want them:
+"Plugin 'honza/vim-snippets'
 
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+"let g:UltiSnipsSnippetsDir = '~/.vim/UltiSnips'
+"let g:UltiSnipsSnippetDirectories = ['~/.vim/bundle/vim-snippets/UltiSnips']
+"let g:UltiSnipsExpandTrigger="<tab>"
+"let g:UltiSnipsJumpForwardTrigger="<c-b>"
+"let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
@@ -573,4 +600,14 @@ let g:UltiSnipsEditSplit="vertical"
 "ActivateAddons vim-snippets snipmate
 let g:UltiSnipsUsePythonVersion = 2
 
-set runtimepath+=~/.vim/ultisnips_rep
+"Plugin 'MarcWeber/vim-addon-manager'
+
+"let g:UltiSnipsSnippetsDir = '~/.vim/bundle/vim-snippets/UltiSnips'
+"let g:UltiSnipsSnippetDirectories = ['~/.vim/bundle/vim-snippets/UltiSnips']
+
+Plugin 'tomtom/tlib_vim'
+
+
+Plugin 'Shougo/vimshell.vim'
+
+Plugin 'Shougo/vimproc.vim'
