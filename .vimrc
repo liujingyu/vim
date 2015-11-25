@@ -35,9 +35,9 @@ let g:mapleader = ","
 
 " Fast saving or quit
 nmap <leader>w :w<cr>
-nmap <leader>q :q!<cr>
+nmap <leader>q :q<cr>
 nmap <leader>Q :qa!<cr>
-nmap <Leader>WQ :wa<cr>:q<cr>
+nmap <Leader>WQ :wqa<cr>
 " 定义快捷键到行首和行尾
 nmap <Leader>lb 0
 nmap <Leader>le $
@@ -110,11 +110,11 @@ set wrap "Wrap lines
 map <right> :bn<cr>
 map <left> :bp<cr>
 
-"Move a line of text using ALT+[jk] or Comamnd+[jk] on mac
-nmap <M-j> mz:m+<cr>`z
-nmap <M-k> mz:m-2<cr>`z
-vmap <M-j> :m'>+<cr>`<my`>mzgv`yo`z
-vmap <M-k> :m'<-2<cr>`>my`<mzgv`yo`z
+" Move a line of text using ALT+[jk] or Comamnd+[jk] on mac
+" nmap <M-j> mz:m+<cr>`z
+" nmap <M-k> mz:m-2<cr>`z
+" vmap <M-j> :m'>+<cr>`<my`>mzgv`yo`z
+" vmap <M-k> :m'<-2<cr>`>my`<mzgv`yo`z
 
 
 """"""""""""""""""""""""""""""
@@ -140,6 +140,12 @@ endfunction
 " Format the statusline
 set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{CurDir()}%h\ \ \ Line:\ %l/%L:%c
 
+"设置 退出vim后，内容显示在终端屏幕, 可以用于查看和复制
+""好处：误删什么的，如果以前屏幕打开，可以找回
+set t_ti= t_te=
+
+" 去掉搜索高亮
+noremap <silent><leader>/ :nohls<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "
@@ -189,7 +195,6 @@ set tags=tags;
 au FileType php setlocal keywordprg=pman
 
 
-
 " " " " " " " " " " " " " " " " " " " " " "
 "
 " Delete trailing white space, useful for Python ;)
@@ -214,30 +219,6 @@ au BufWrite *.js :call DeleteTrailingWS()
 " language section
 "
 " " " " " " " " " " " " " " " "
-
-""""""""""""""""""""""""""""""
-" => JavaScript section
-"""""""""""""""""""""""""""""""
-au FileType javascript call JavaScriptFold()
-au FileType javascript setl fen
-au FileType javascript setl nocindent
-
-au FileType javascript imap <c-t> AJS.log();<esc>hi
-au FileType javascript imap <c-a> alert();<esc>hi
-
-au FileType javascript inoremap <buffer> $r return
-au FileType javascript inoremap <buffer> $f //--- PH ----------------------------------------------<esc>FP2xi
-
-function! JavaScriptFold()
-    setl foldmethod=syntax
-    setl foldlevelstart=1
-    syn region foldBraces start=/{/ end=/}/ transparent fold keepend extend
-
-    function! FoldText()
-        return substitute(getline(v:foldstart), '{.*', '{...}', '')
-    endfunction
-    setl foldtext=FoldText()
-endfunction
 
 """"""""""""""""""""""""""""""
 " => Python section
@@ -417,20 +398,20 @@ Plugin 'scrooloose/syntastic'
 """"""""""""""""""""""""
 Plugin 'easymotion/vim-easymotion'
 
-"easymotion
 let g:EasyMotion_leader_key = '<Leader><Leader>'
 map  / <Plug>(easymotion-sn)
 omap / <Plug>(easymotion-tn)
 map  n <Plug>(easymotion-next)
 map  N <Plug>(easymotion-prev)
 let g:EasyMotion_smartcase = 1
-map <Leader>l <Plug>(easymotion-lineforward)
-map <Leader>j <Plug>(easymotion-j)
-map <Leader>k <Plug>(easymotion-k)
-map <Leader>h <Plug>(easymotion-linebackward)
+map <Leader><Leader>l <Plug>(easymotion-lineforward)
+map <Leader><Leader>j <Plug>(easymotion-j)
+map <Leader><Leader>k <Plug>(easymotion-k)
+map <Leader><Leader>h <Plug>(easymotion-linebackward)
+
 
 Plugin 'ldx/vim-manage-classpath'
-Plugin 'tomasr/molokai'
+"Plugin 'tomasr/molokai'
 
 Plugin 'leshill/vim-json'
 let g:vim_json_syntax_conceal = 1
@@ -607,7 +588,69 @@ let g:UltiSnipsUsePythonVersion = 2
 
 Plugin 'tomtom/tlib_vim'
 
-
 Plugin 'Shougo/vimshell.vim'
 
 Plugin 'Shougo/vimproc.vim'
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" 自动对齐
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+Plugin 'junegunn/vim-easy-align'
+
+vmap <Leader>a <Plug>(EasyAlign)
+nmap <Leader>a <Plug>(EasyAlign)
+if !exists('g:easy_align_delimiters')
+    let g:easy_align_delimiters = {}
+endif
+let g:easy_align_delimiters['#'] = { 'pattern': '#', 'ignore_groups': ['String'] }
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" 括号高亮
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+Plugin 'kien/rainbow_parentheses.vim'
+
+let g:rbpt_colorpairs = [
+    \ ['brown',       'RoyalBlue3'],
+    \ ['Darkblue',    'SeaGreen3'],
+    \ ['darkgray',    'DarkOrchid3'],
+    \ ['darkgreen',   'firebrick3'],
+    \ ['darkcyan',    'RoyalBlue3'],
+    \ ['darkred',     'SeaGreen3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['brown',       'firebrick3'],
+    \ ['gray',        'RoyalBlue3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['Darkblue',    'firebrick3'],
+    \ ['darkgreen',   'RoyalBlue3'],
+    \ ['darkcyan',    'SeaGreen3'],
+    \ ['darkred',     'DarkOrchid3'],
+    \ ['red',         'firebrick3'],
+    \ ]
+
+" 不加入这行, 防止黑色括号出现, 很难识别
+" \ ['black',       'SeaGreen3'],
+
+let g:rbpt_max = 16
+let g:rbpt_loadcmd_toggle = 0
+au VimEnter * RainbowParenthesesToggle
+au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadSquare
+au Syntax * RainbowParenthesesLoadBraces
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" 快速注释/解开注释
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+Plugin 'scrooloose/nerdcommenter'
+" 注释的时候自动加个空格, 强迫症必配
+let g:NERDSpaceDelims=1
+
+"冲突
+"Plugin 'kshenoy/vim-signature'
